@@ -1,35 +1,39 @@
-const container = document.querySelector('.container');
+const container = document.querySelector('.items');
 const cubes = document.querySelectorAll('.cube');
-
 let selectedCube = null;
 let offsetX = 0;
 let offsetY = 0;
-
-// container boundaries
-const containerRect = container.getBoundingClientRect();
 
 cubes.forEach(cube => {
   cube.addEventListener('mousedown', (e) => {
     selectedCube = cube;
     const rect = cube.getBoundingClientRect();
-    
-    // calculate offset so cube sticks to cursor naturally
+    const containerRect = container.getBoundingClientRect();
+
+    // Calculate cursor offset relative to cube
     offsetX = e.clientX - rect.left;
     offsetY = e.clientY - rect.top;
 
-    // make cube absolute positioned inside container
+    // Switch cube to absolute positioning
     cube.style.position = 'absolute';
     cube.style.zIndex = 1000;
+
+    // Set initial position relative to container
+    cube.style.left = rect.left - containerRect.left + 'px';
+    cube.style.top = rect.top - containerRect.top + 'px';
   });
 });
 
 document.addEventListener('mousemove', (e) => {
   if (!selectedCube) return;
 
+  const containerRect = container.getBoundingClientRect();
+
+  // Calculate new position
   let x = e.clientX - containerRect.left - offsetX;
   let y = e.clientY - containerRect.top - offsetY;
 
-  // boundary constraints
+  // Keep within boundaries
   x = Math.max(0, Math.min(x, container.clientWidth - selectedCube.offsetWidth));
   y = Math.max(0, Math.min(y, container.clientHeight - selectedCube.offsetHeight));
 
