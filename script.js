@@ -1,49 +1,44 @@
 const container = document.querySelector('.items');
-const cubes = document.querySelectorAll('.cube');
-let selectedCube = null;
+const items = document.querySelectorAll('.item');
+let selectedItem = null;
 let offsetX = 0;
 let offsetY = 0;
 
-cubes.forEach(cube => {
-  cube.addEventListener('mousedown', (e) => {
-    selectedCube = cube;
-    const rect = cube.getBoundingClientRect();
+items.forEach(item => {
+  item.addEventListener('mousedown', (e) => {
+    selectedItem = item;
+    const rect = item.getBoundingClientRect();
     const containerRect = container.getBoundingClientRect();
 
-    // Calculate cursor offset relative to cube
     offsetX = e.clientX - rect.left;
     offsetY = e.clientY - rect.top;
 
-    // Switch cube to absolute positioning
-    cube.style.position = 'absolute';
-    cube.style.zIndex = 1000;
+    item.style.position = 'absolute';
+    item.style.zIndex = 1000;
 
-    // Set initial position relative to container
-    cube.style.left = rect.left - containerRect.left + 'px';
-    cube.style.top = rect.top - containerRect.top + 'px';
+    item.style.left = rect.left - containerRect.left + 'px';
+    item.style.top = rect.top - containerRect.top + 'px';
   });
 });
 
 document.addEventListener('mousemove', (e) => {
-  if (!selectedCube) return;
+  if (!selectedItem) return;
 
   const containerRect = container.getBoundingClientRect();
 
-  // Calculate new position
   let x = e.clientX - containerRect.left - offsetX;
   let y = e.clientY - containerRect.top - offsetY;
 
-  // Keep within boundaries
-  x = Math.max(0, Math.min(x, container.clientWidth - selectedCube.offsetWidth));
-  y = Math.max(0, Math.min(y, container.clientHeight - selectedCube.offsetHeight));
+  x = Math.max(0, Math.min(x, container.clientWidth - selectedItem.offsetWidth));
+  y = Math.max(0, Math.min(y, container.clientHeight - selectedItem.offsetHeight));
 
-  selectedCube.style.left = x + 'px';
-  selectedCube.style.top = y + 'px';
+  selectedItem.style.left = x + 'px';
+  selectedItem.style.top = y + 'px';
 });
 
 document.addEventListener('mouseup', () => {
-  if (selectedCube) {
-    selectedCube.style.zIndex = 1;
-    selectedCube = null;
+  if (selectedItem) {
+    selectedItem.style.zIndex = 1;
+    selectedItem = null;
   }
 });
